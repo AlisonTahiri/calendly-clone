@@ -120,3 +120,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+@utility container {
+  @apply mx-auto w-full 2xl:max-w-[1440px] p-[2rem];
+}
