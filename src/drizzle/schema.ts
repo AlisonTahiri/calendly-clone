@@ -8,6 +8,7 @@ import {
   pgTable,
   index,
   pgEnum,
+  integer,
 } from "drizzle-orm/pg-core";
 
 const createdAt = timestamp("createdAt").notNull().defaultNow();
@@ -22,7 +23,7 @@ export const EventTable = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     description: text("description"),
-    durationInMinutes: text("durationInMinutes").notNull(),
+    durationInMinutes: integer("durationInMinutes").notNull(),
     clerkUserId: text("clerkUserId").notNull(),
     isActive: boolean("isActive").notNull().default(true),
     createdAt,
