@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const eventFormSchema = z.object({
   name: z.string().min(1, "Please enter an event name."),
-  description: z.string().optional(),
+  description: z.string().nullable(),
   isActive: z.boolean().default(true).optional(),
   durationInMinutes: z.coerce
     .number<number>()

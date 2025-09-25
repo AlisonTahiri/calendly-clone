@@ -4,6 +4,7 @@ import { eventFormSchema } from "@/app/schema/events";
 import { db } from "@/drizzle/db";
 import { EventTable } from "@/drizzle/schema";
 import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import "use-server";
 import { z } from "zod";
@@ -22,6 +23,34 @@ export async function createEvent(
   }
 
   await db.insert(EventTable).values({ ...data, clerkUserId: userId });
+
+  redirect("/events");
+}
+
+export async function updateEvent(
+  id: string,
+  unsafeData: z.infer<typeof eventFormSchema>
+): Promise<{ error?: boolean } | undefined> {
+  const { success, data } = eventFormSchema.safeParse(unsafeData);
+
+  const { userId } = await auth();
+
+  if (!success || !userId) {
+    return {
+      error: true,
+    };
+  }
+
+  const { rowCount } = await db
+    .update(EventTable)
+    .set({ ...data, clerkUserId: userId })
+    .where(and(eq(EventTable.id, id), eq(EventTable.clerkUserId, userId)));
+
+  if (rowCount === 0) {
+    return {
+      error: true,
+    };
+  }
 
   redirect("/events");
 }
