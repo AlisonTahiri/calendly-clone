@@ -4,7 +4,7 @@ import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { eventFormSchema } from "@/app/schema/events";
+import { eventFormSchema } from "@/schema/events";
 import {
   Form,
   FormControl,
@@ -195,10 +195,20 @@ export default function EventForm({
             </AlertDialog>
           )}
 
-          <Button type="button" asChild variant="outline">
+          <Button
+            disabled={isDeletePending || form.formState.isSubmitting}
+            type="button"
+            asChild
+            variant="outline"
+          >
             <Link href="/events">Cancel</Link>
           </Button>
-          <Button type="submit">Save</Button>
+          <Button
+            disabled={isDeletePending || form.formState.isSubmitting}
+            type="submit"
+          >
+            Save
+          </Button>
         </div>
       </form>
     </Form>

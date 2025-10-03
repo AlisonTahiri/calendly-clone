@@ -1,12 +1,13 @@
 "use server";
 
-import { eventFormSchema } from "@/app/schema/events";
+import "server-only";
+
+import { eventFormSchema } from "@/schema/events";
 import { db } from "@/drizzle/db";
 import { EventTable } from "@/drizzle/schema";
 import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import "use-server";
 import { z } from "zod";
 
 export async function createEvent(
