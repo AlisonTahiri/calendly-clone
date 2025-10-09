@@ -2,12 +2,13 @@
 import "use-server";
 import { z } from "zod";
 
-import { scheduleFormSchema } from "@/schema/schedule";
+import { scheduleFormSchema, ScheduleFormValues } from "@/schema/schedule";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/drizzle/db";
 import { ScheduleAvailabilityTable, ScheduleTable } from "@/drizzle/schema";
 import { BatchItem } from "drizzle-orm/batch";
 import { eq } from "drizzle-orm";
+import { Availability } from "@/components/forms/ScheduleForm/Main";
 
 export async function saveSchedule(
   unsafeData: z.infer<typeof scheduleFormSchema>
@@ -21,8 +22,9 @@ export async function saveSchedule(
       error: true,
     };
   }
+  const dbTypeData = convertScheduleFormDataToDBData(data);
 
-  const { availabilities, ...scheduleData } = data;
+  const { availabilities, ...scheduleData } = dbTypeData;
 
   const [{ id: scheduleId }] = await db
     .insert(ScheduleTable)
@@ -53,4 +55,30 @@ export async function saveSchedule(
   }
 
   await db.batch(statements);
+}
+
+type DBScheduleFormSchema = {
+  timezone: string;
+  availabilities: Availability[];
+};
+
+function convertScheduleFormDataToDBData(
+  values: ScheduleFormValues
+): DBScheduleFormSchema {
+  const newAvailabilities: DBScheduleFormSchema["availabilities"] = [];
+
+  values.availabilities.forEach((availability) => {
+    availability.timeSlots.forEach((timeSlot) => {
+      newAvailabilities.push({
+        dayOfWeek: availability.dayOfWeek,
+        startTime: timeSlot.startTime,
+        endTime: timeSlot.endTime,
+      });
+    });
+  });
+
+  return {
+    timezone: values.timezone,
+    availabilities: newAvailabilities,
+  };
 }

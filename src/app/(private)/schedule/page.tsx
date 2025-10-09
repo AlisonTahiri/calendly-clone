@@ -1,5 +1,4 @@
-import EventForm from "@/components/forms/EventForm";
-import ScheduleForm from "@/components/forms/ScheduleForm";
+import ScheduleForm from "@/components/forms/ScheduleForm/Main";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/drizzle/db";
 import { auth } from "@clerk/nextjs/server";
