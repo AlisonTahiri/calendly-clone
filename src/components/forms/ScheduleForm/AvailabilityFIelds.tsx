@@ -1,4 +1,3 @@
-// components/availability-fields.tsx
 "use client";
 
 import { FieldErrors, useFieldArray, useFormContext } from "react-hook-form";

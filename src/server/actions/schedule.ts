@@ -8,7 +8,7 @@ import { db } from "@/drizzle/db";
 import { ScheduleAvailabilityTable, ScheduleTable } from "@/drizzle/schema";
 import { BatchItem } from "drizzle-orm/batch";
 import { eq } from "drizzle-orm";
-import { Availability } from "@/components/forms/ScheduleForm/Main";
+import { Availability } from "@/components/forms/ScheduleForm/ScheduleForm";
 
 export async function saveSchedule(
   unsafeData: z.infer<typeof scheduleFormSchema>
