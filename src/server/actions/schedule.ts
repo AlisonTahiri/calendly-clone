@@ -1,5 +1,5 @@
 "use server";
-import "use-server";
+import "server-only";
 import { z } from "zod";
 
 import { scheduleFormSchema, ScheduleFormValues } from "@/schema/schedule";

@@ -1,3 +1,3 @@
-export default function BookEventPage() {
+export default async function BookEventPage() {
   return <div>BookEvents</div>;
 }
