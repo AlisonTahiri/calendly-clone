@@ -1,12 +1,11 @@
 "use client";
 
-import { useForm, useFieldArray, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -16,14 +15,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { AvailabilityFields } from "./AvailabilityFIelds";
-import { scheduleFormSchema, ScheduleFormValues } from "@/schema/schedule";
 import { DAYS_OF_WEEK_IN_ORDER } from "@/data/constants";
 import { formatTimezoneOffset } from "@/lib/formatters";
+import { scheduleFormSchema, ScheduleFormValues } from "@/schema/schedule";
 import { saveSchedule } from "@/server/actions/schedule";
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { AvailabilityFields } from "./AvailabilityFIelds";
 
 export type Availability = {
   startTime: string;
@@ -141,7 +141,7 @@ export default function ScheduleForm({
           <Button disabled={form.formState.isSubmitting} type="submit">
             Save Schedule
             {form.formState.isSubmitting && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
             )}
           </Button>
         </form>

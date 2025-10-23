@@ -1,10 +1,23 @@
 "use client";
 
-import React, { useMemo } from "react";
+import {
+  formatDate,
+  formatTimeString,
+  formatTimezoneOffset,
+} from "@/lib/formatters";
+import { cn } from "@/lib/utils";
+import { meetingFormSchema } from "@/schema/meetings";
+import { createMeeting } from "@/server/actions/meetings";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { isSameDay } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { meetingFormSchema } from "@/schema/meetings";
+import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 import {
   Form,
   FormControl,
@@ -13,8 +26,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Select,
   SelectContent,
@@ -22,20 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  formatDate,
-  formatTimeString,
-  formatTimezoneOffset,
-} from "@/lib/formatters";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "@/lib/utils";
-import { isSameDay } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "../ui/calendar";
-import { toZonedTime } from "date-fns-tz";
-import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { createMeeting } from "@/server/actions/meetings";
 
 export default function MeetingForm({
   validTimes,
@@ -252,6 +252,9 @@ export default function MeetingForm({
           </Button>
           <Button disabled={form.formState.isSubmitting} type="submit">
             Schedule
+            {form.formState.isSubmitting && (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
         </div>
       </form>

@@ -1,25 +1,14 @@
 "use client";
 
-import React, { useTransition } from "react";
+import { eventFormSchema } from "@/schema/events";
+import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { eventFormSchema } from "@/schema/events";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { Textarea } from "../ui/textarea";
-import { Switch } from "../ui/switch";
-import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,7 +19,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
+import { Button } from "../ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea";
 
 export default function EventForm({
   event,
@@ -208,6 +209,9 @@ export default function EventForm({
             type="submit"
           >
             Save
+            {form.formState.isSubmitting && (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            )}
           </Button>
         </div>
       </form>
