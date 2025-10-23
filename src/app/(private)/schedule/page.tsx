@@ -1,8 +1,6 @@
 import ScheduleForm from "@/components/forms/ScheduleForm/ScheduleForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { db } from "@/drizzle/db";
 import { auth } from "@clerk/nextjs/server";
-import React from "react";
 
 export default async function SchedulePage() {
   const { userId, redirectToSignIn } = await auth();
@@ -16,14 +14,5 @@ export default async function SchedulePage() {
     },
   });
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Schedule</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ScheduleForm schedule={schedule} />
-      </CardContent>
-    </Card>
-  );
+  return <ScheduleForm schedule={schedule} />;
 }

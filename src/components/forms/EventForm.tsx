@@ -1,5 +1,6 @@
 "use client";
 
+import { formatEventDescription } from "@/lib/formatters";
 import { eventFormSchema } from "@/schema/events";
 import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,7 +58,11 @@ export default function EventForm({
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     const action = event ? updateEvent.bind(null, event.id) : createEvent;
-    const data = await action(values);
+    const data = await action({
+      ...values,
+      name:
+        values.name + ` - ${formatEventDescription(values.durationInMinutes)}`,
+    });
 
     if (data?.error) {
       form.setError("root", {

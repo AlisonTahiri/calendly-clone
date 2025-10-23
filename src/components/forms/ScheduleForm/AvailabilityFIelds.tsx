@@ -1,18 +1,18 @@
 "use client";
 
-import { FieldErrors, useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { ScheduleFormValues } from "@/schema/schedule";
 import { MinusCircleIcon, PlusCircleIcon } from "lucide-react";
 import { Fragment } from "react";
+import { FieldErrors, useFieldArray, useFormContext } from "react-hook-form";
 
 interface AvailabilityFieldsProps {
   dayIndex: number;
@@ -30,7 +30,7 @@ export function AvailabilityFields({
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 sm:gap-4">
       {fields.map((field, slotIndex) => {
         let errorMessage = "";
         if (errors?.availabilities) {
@@ -42,12 +42,12 @@ export function AvailabilityFields({
         return (
           <Fragment key={field.id}>
             <FormMessage>{errorMessage}</FormMessage>
-            <div className="flex gap-2 items-center">
+            <div className="flex  md:flex-row gap-2 items-center  rounded p-1">
               <FormField
                 control={control}
                 name={`availabilities.${dayIndex}.timeSlots.${slotIndex}.startTime`}
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem className="flex-1 w-full">
                     <FormLabel className={slotIndex > 0 ? "sr-only" : ""}>
                       Start Time
                     </FormLabel>
@@ -62,7 +62,7 @@ export function AvailabilityFields({
                 control={control}
                 name={`availabilities.${dayIndex}.timeSlots.${slotIndex}.endTime`}
                 render={({ field }) => (
-                  <FormItem className="flex-1">
+                  <FormItem className="flex-1 w-full">
                     <FormLabel className={slotIndex > 0 ? "sr-only" : ""}>
                       End Time
                     </FormLabel>
@@ -73,11 +73,12 @@ export function AvailabilityFields({
                   </FormItem>
                 )}
               />
+
               <Button
                 type="button"
-                variant="ghost"
+                variant="destructiveGhost"
                 size="sm"
-                className="w-8 h-8"
+                className="w-8 h-8 self-end"
                 onClick={() => remove(slotIndex)}
               >
                 <MinusCircleIcon className="h-4 w-4" />

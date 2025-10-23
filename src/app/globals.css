@@ -125,5 +125,5 @@
 }
 
 @utility container {
-  @apply mx-auto w-full 2xl:max-w-[1440px] p-[2rem];
+  @apply mx-auto w-full 2xl:max-w-[1440px] p-[1rem] sm:p-[2rem];
 }

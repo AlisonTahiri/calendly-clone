@@ -83,8 +83,8 @@ export default function ScheduleForm({
   });
 
   return (
-    <div className="container p-8">
-      <h1 className="text-2xl font-semibold mb-6">Set Your Availability</h1>
+    <div className="container flex flex-col gap-2">
+      <h1 className="text-2xl font-semibold mb-2">Set Your Availability</h1>
       <FormProvider {...form}>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {form.formState.errors.root && (
@@ -126,7 +126,7 @@ export default function ScheduleForm({
             )}
           />
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
             {availabilitiesFields.map((day, dayIndex) => (
               <div key={day.id} className="p-4 border rounded-md sm:max-w-md">
                 <h3 className="font-medium capitalize mb-2">{day.dayOfWeek}</h3>
