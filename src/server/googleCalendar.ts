@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import "server-only";
 import { google } from "googleapis";
-import { endOfDay, startOfDay } from "date-fns";
+import { addMinutes, endOfDay, startOfDay } from "date-fns";
 export async function getCalendarEventTimes(
   clerkUserId: string,
   { start, end }: { start: Date; end: Date }
@@ -39,10 +39,62 @@ export async function getCalendarEventTimes(
   );
 }
 
+export async function createCalendarEvent({
+  clerkUserId,
+  durationInMinutes,
+  guestEmail,
+  guestName,
+  guestNotes,
+  startTime,
+  eventName,
+}: {
+  clerkUserId: string;
+  guestName: string;
+  guestEmail: string;
+  guestNotes?: string;
+  startTime: Date;
+  durationInMinutes: number;
+  eventName: string;
+}) {
+  const oAuthClient = await getOauthClient(clerkUserId);
+  const calendarUser = await (await clerkClient()).users.getUser(clerkUserId);
+
+  if (calendarUser.primaryEmailAddress == null) {
+    throw new Error("User has no primary email address");
+  }
+  const calendarEvent = await google.calendar("v3").events.insert({
+    calendarId: "primary",
+    auth: oAuthClient,
+    sendUpdates: "all",
+    requestBody: {
+      attendees: [
+        {
+          email: guestEmail,
+          displayName: guestName,
+        },
+        {
+          email: calendarUser.primaryEmailAddress.emailAddress,
+          displayName: calendarUser.fullName,
+          responseStatus: "accepted",
+        },
+      ],
+      description: guestNotes ? `Additional details: ${guestNotes}` : undefined,
+      start: {
+        dateTime: startTime.toISOString(),
+      },
+      end: {
+        dateTime: addMinutes(startTime, durationInMinutes).toISOString(),
+      },
+      summary: `${guestName} + ${calendarUser.fullName}: ${eventName}`,
+    },
+  });
+
+  return calendarEvent.data;
+}
 async function getOauthClient(clerkUserId: string) {
   const token = await (
     await clerkClient()
-  ).users.getUserOauthAccessToken(clerkUserId, "oauth_google");
+  ).users.getUserOauthAccessToken(clerkUserId, "google");
 
   if (token.data.length === 0 || token.data[0].token == null) {
     return;
