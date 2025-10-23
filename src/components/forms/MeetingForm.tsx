@@ -13,7 +13,7 @@ import { isSameDay } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
@@ -46,6 +46,8 @@ export default function MeetingForm({
   eventId: string;
   clerkUserId: string;
 }) {
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   const form = useForm<z.infer<typeof meetingFormSchema>>({
     resolver: zodResolver(meetingFormSchema),
     defaultValues: {
@@ -116,7 +118,7 @@ export default function MeetingForm({
             control={form.control}
             name="date"
             render={({ field }) => (
-              <Popover>
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <FormItem className="flex-1">
                   <FormLabel>Date</FormLabel>
                   <PopoverTrigger asChild>
@@ -139,9 +141,13 @@ export default function MeetingForm({
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
+                      defaultMonth={field.value}
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(value) => {
+                        field.onChange(value);
+                        setIsCalendarOpen(false);
+                      }}
                       disabled={(date) =>
                         !validTimesInTimezone.some((time) =>
                           isSameDay(date, time)
