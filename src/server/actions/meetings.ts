@@ -2,11 +2,10 @@
 import { db } from "@/drizzle/db";
 import { getValidTimesFromSchedule } from "@/lib/getValidTimesFromSchedule";
 import { meetingActionSchema } from "@/schema/meetings";
+import { redirect } from "next/navigation";
 import "server-only";
 import z from "zod";
 import { createCalendarEvent } from "../googleCalendar";
-import { redirect } from "next/navigation";
-import { fromZonedTime } from "date-fns-tz";
 
 export async function createMeeting(
   unsafeData: z.infer<typeof meetingActionSchema>
@@ -30,15 +29,12 @@ export async function createMeeting(
 
   if (event == null) return { error: true };
 
-  const startInTimezone = fromZonedTime(data.startTime, data.timezone);
-
   const validTimes = await getValidTimesFromSchedule([data.startTime], event);
 
   if (validTimes.length === 0) return { error: true };
 
   await createCalendarEvent({
     ...data,
-    startTime: startInTimezone,
     durationInMinutes: event.durationInMinutes,
     eventName: event.name,
   });

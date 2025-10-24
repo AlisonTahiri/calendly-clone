@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import "server-only";
-import { google } from "googleapis";
 import { addMinutes, endOfDay, startOfDay } from "date-fns";
+import { google } from "googleapis";
+import "server-only";
 export async function getCalendarEventTimes(
   clerkUserId: string,
   { start, end }: { start: Date; end: Date }
@@ -47,6 +47,7 @@ export async function createCalendarEvent({
   guestNotes,
   startTime,
   eventName,
+  timezone,
 }: {
   clerkUserId: string;
   guestName: string;
@@ -55,6 +56,7 @@ export async function createCalendarEvent({
   startTime: Date;
   durationInMinutes: number;
   eventName: string;
+  timezone: string;
 }) {
   const oAuthClient = await getOauthClient(clerkUserId);
   const calendarUser = await (await clerkClient()).users.getUser(clerkUserId);
@@ -81,8 +83,10 @@ export async function createCalendarEvent({
       description: guestNotes ? `Additional details: ${guestNotes}` : undefined,
       start: {
         dateTime: startTime.toISOString(),
+        timeZone: timezone,
       },
       end: {
+        timeZone: timezone,
         dateTime: addMinutes(startTime, durationInMinutes).toISOString(),
       },
       summary: `${guestName} + ${calendarUser.fullName}: ${eventName}`,
