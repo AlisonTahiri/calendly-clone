@@ -54,6 +54,7 @@ export default async function BookEventPage({
 
   return (
     <Card className="max-w-md mx-auto">
+      <div>{new Date().toTimeString()}</div>
       <CardHeader>
         <CardTitle>
           Book {event.name} with {calendarUser.fullName}
