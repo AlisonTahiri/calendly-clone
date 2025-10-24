@@ -172,7 +172,7 @@ export default function MeetingForm({
                   onValueChange={(value) =>
                     field.onChange(new Date(Date.parse(value)))
                   }
-                  defaultValue={field.value?.toISOString()}
+                  defaultValue={field.value?.toLocaleString()}
                 >
                   <FormControl className="w-full">
                     <SelectTrigger>
