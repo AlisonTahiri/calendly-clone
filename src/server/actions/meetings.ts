@@ -42,6 +42,8 @@ export async function createMeeting(
   redirect(
     `/book/${data.clerkUserId}/${
       data.eventId
-    }/success?startTime=${data.startTime.toISOString()}`
+    }/success?startTime=${data.startTime.toISOString()}&timezone=${
+      data.timezone
+    }`
   );
 }

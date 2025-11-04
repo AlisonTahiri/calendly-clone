@@ -37,11 +37,12 @@ export function formatTimeString(date: Date) {
   return timeFormatter.format(date);
 }
 
-const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
-  dateStyle: "medium",
-  timeStyle: "short",
-});
+export function formatDateTime(date: Date, timeZone?: string) {
+  const formatter = new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone,
+  });
 
-export function formatDateTime(date: Date) {
-  return dateTimeFormatter.format(date);
+  return formatter.format(date);
 }
