@@ -81,9 +81,11 @@ export async function createCalendarEvent({
       description: guestNotes ? `Additional details: ${guestNotes}` : undefined,
       start: {
         dateTime: startTime.toISOString(),
+        timeZone: "Europe/London",
       },
       end: {
         dateTime: addMinutes(startTime, durationInMinutes).toISOString(),
+        timeZone: "Europe/London",
       },
       summary: `${guestName} + ${calendarUser.fullName}: ${eventName}`,
     },
